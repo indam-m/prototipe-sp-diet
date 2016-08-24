@@ -1,0 +1,71 @@
+(plan (name a) (relation AND) (subplan b c d e)
+	(goal PENYUSUNAN-DIET) (aksi))
+
+(plan (name b) (relation AND) (subplan ba bb bc bd)
+	(goal PENGHITUNGAN-DATA-PASIEN) (aksi))
+
+(plan (name ba) (relation nul) (subplan nul)
+	(goal PENGHITUNGAN-IMT) (aksi HITUNG-IMT))
+
+(plan (name bb) (relation nul) (subplan nul)
+	(goal PENENTUAN-KATEGORI-BERAT-BADAN) (aksi TENTUKAN-KATEGORI-BERAT-BADAN))
+
+(plan (name bc) (relation nul) (subplan nul)
+	(goal PENGHITUNGAN-AMB) (aksi HITUNG-AMB))
+
+(plan (name bd) (relation nul) (subplan nul)
+	(goal PENGHITUNGAN-KEBUTUHAN-KALORI) (aksi HITUNG-KEBUTUHAN-KALORI))
+
+(plan (name c) (relation AND) (subplan ca cb)
+	(goal PENENTUAN-KARAKTERISTIK-DIET) (aksi TENTUKAN-KARAKTERISTIK-DIET))
+
+(plan (name ca) (relation OR) (subplan caa cab cac cad)
+	(goal PENENTUAN-TIPE-DIET) (aksi TENTUKAN-TIPE-DIET))
+
+(plan (name caa) (relation nul) (subplan nul)
+	(goal PENETAPAN-DIET-BIASA) (aksi TETAPKAN-DIET-BIASA))
+
+(plan (name cab) (relation nul) (subplan nul)
+	(goal PENETAPAN-DIET-DIABETES) (aksi TETAPKAN-DIET-DIABETES))
+
+(plan (name cac) (relation nul) (subplan nul)
+	(goal PENETAPAN-DIET-RENDAH-PURIN) (aksi TETAPKAN-DIET-RENDAH-PURIN))
+
+(plan (name cad) (relation nul) (subplan nul)
+	(goal PENETAPAN-DIET-TINGGI-SERAT) (aksi TETAPKAN-DIET-TINGGI-SERAT))
+
+(plan (name cb) (relation OR) (subplan cba cbb)
+	(goal PENENTUAN-DIET-LEMAK) (aksi TENTUKAN-DIET-LEMAK))
+
+(plan (name cba) (relation nul) (subplan nul)
+	(goal DENGAN-DIET-RENDAH-LEMAK) (aksi TETAPKAN-DENGAN-DIET-RENDAH-LEMAK))
+
+(plan (name cbb) (relation nul) (subplan nul)
+	(goal TANPA-DIET-RENDAH-LEMAK) (aksi TETAPKAN-TANPA-DIET-RENDAH-LEMAK))
+
+(plan (name d) (relation AND) (subplan da db dc dd de)
+	(goal PENYUSUNAN-MENU-MAKANAN) (aksi))
+
+(plan (name da) (relation nul) (subplan nul)
+	(goal MENU-PAGI) (aksi TENTUKAN-MENU-PAGI))
+
+(plan (name db) (relation nul) (subplan nul)
+	(goal MENU-SNACK-PAGI) (aksi TENTUKAN-MENU-SNACK-PAGI))
+
+(plan (name dc) (relation nul) (subplan nul)
+	(goal MENU-SIANG) (aksi TENTUKAN-MENU-SIANG))
+
+(plan (name dd) (relation nul) (subplan nul)
+	(goal MENU-SNACK-SORE) (aksi TENTUKAN-MENU-SNACK-SORE))
+
+(plan (name de) (relation nul) (subplan nul)
+	(goal MENU-MALAM) (aksi TENTUKAN-MENU-MALAM))
+
+(plan (name e) (relation AND) (subplan ea eb)
+	(goal PENENTUAN-TIPS-DIET) (aksi TENTUKAN-TIPS-DIET))
+
+(plan (name ea) (relation nul) (subplan nul)
+	(goal PENENTUAN-TIPS-KONSUMSI-CAIRAN) (aksi TENTUKAN-TIPS-KONSUMSI-CAIRAN))
+
+(plan (name eb) (relation nul) (subplan nul)
+	(goal PENENTUAN-TIPS-PENYAKIT) (aksi TENTUKAN-TIPS-PENYAKIT))

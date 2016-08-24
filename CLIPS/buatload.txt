@@ -1,0 +1,21 @@
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas Akhir/Program/Web/Web2/CLIPS/templates.clp")
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas Akhir/Program/Web/Web2/CLIPS/functions.clp")
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas Akhir/Program/Web/Web2/CLIPS/rules.clp")
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas Akhir/Program/Web/Web2/CLIPS/skeletal-kontrol.clp")
+(deffacts data-pasien "data pasien" (pasien (berat-badan 110) (tinggi-badan 170) (usia 22) (jenis-kelamin laki)))
+(assert (mulai))
+
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas\ Akhir/sudoku-AI/templates.clp")
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas\ Akhir/sudoku-AI/rules.clp")
+(load "/Users/indammuhammad/Documents/perkuliahan/Tugas\ Akhir/sudoku-AI/soal1.clp")
+
+x = 20.4 -> 0.2 => berat 103.5
+
+(41.1 - x) / (123.9 - x) = 0.25
+41.1 - x = 30.975 - 0.25x
+0.75x = 10.125
+x = 13.5
+
+(bahan-makanan (nama "") (golongan 1) (berat ) (satuan ))
+
+cd /Users/indammuhammad/Documents/perkuliahan/Tugas\ Akhir/Program/Web/Web2

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block title %}Beranda{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="layer-hidden"></div>
+  <div id="content-s" class="pa__padding">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-7 grid-center pa__box">
+          <div class="pa--heading">
+            Masukkan data pasien
+          </div>
+          <form class="form-horizontal pa__form" action="result" method="post">
+            <div class="form-group">
+              <label class="col-md-5 control-label">Jenis kelamin</label>
+              <div class="col-md-7">
+                <input type="radio" name="jk" value="Laki-laki" checked> Laki-laki<br>
+                <input type="radio" name="jk" value="Perempuan"> Perempuan<br>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5 control-label">Usia</label>
+              <div class="col-xs-2">
+                <input class="form-control" type="number" min="15" max="60" id="usia" name="usia" required>
+              </div>
+              <label class="control-label">tahun</label>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5 control-label">Tinggi badan</label>
+              <div class="col-xs-2">
+                <input class="form-control" type="number" min="1" id="tb" name="tb" required>
+              </div>
+              <label class="control-label">cm</label>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5 control-label">Berat badan</label>
+              <div class="col-xs-2">
+                <input class="form-control" type="number" min="1" id="bb" name="bb" required>
+              </div>
+              <label class="control-label">kg</label>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5 control-label">Aktivitas fisik</label>
+              <div class="col-md-4">
+                <select class="form-control selcls" id="aktivitas" name="aktivitas">
+                  <option value="Sangat ringan"> Sangat ringan </option>
+                  <option value="Ringan"> Ringan </option>
+                  <option value="Sedang"> Sedang </option>
+                  <option value="Berat"> Berat </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-5 control-label">Penyakit</label>
+              <div class="col-md-4">
+                <select class="form-control selcls" id="penyakit" name="penyakit">
+                  <option value="-"> - </option>
+                  <option value="Asam urat"> Asam urat </option>
+                  <option value="Diabetes melitus"> Diabetes melitus </option>
+                  <option value="Hiperkolesterol"> Hiperkolesterol </option>
+                  <option value="Hipertensi"> Hipertensi </option>
+                  <option value="Hipertrigliserida"> Hipertrigliserida </option>
+                  <option value="Jantung"> Jantung </option>
+                  <option value="Konstipasi kronis"> Konstipasi kronis </option>
+                  <option value="Penyakit lambung"> Penyakit lambung </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-7 pa__btn-container-form">
+                <input type="submit" class="btn btn-tosca btn-margin-bottom" value="Lanjut"></input>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /.container -->
+
+{% endblock %}

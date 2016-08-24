@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Hasil{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="layer-hidden"></div>
+  <div id="content-s" class="pa__padding">
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-10 grid-center pa__box">
+          <div class="pa--heading">
+            Data Rinci Pasien
+          </div>
+          <br>
+          {{ t }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<!-- /.container -->
+
+
+{% endblock %}

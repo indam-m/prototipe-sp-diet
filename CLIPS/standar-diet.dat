@@ -1,0 +1,8 @@
+(standar-diet (kalori 1100) (pagi 0.5 1 0 0 0 0 1) (snack-pagi 0 0 0 0 1 0 0) (siang 1 1 1 1 1 0 1) (snack-sore 0 0 0 0 1 0 0) (malam 1 1 1 1 1 0 1))
+(standar-diet (kalori 1300) (pagi 1 1 0 0 0 0 1) (snack-pagi 0 0 0 0 1 0 0) (siang 1 1 1 1 1 0 2) (snack-sore 0 0 0 0 1 0 0) (malam 1 1 1 1 1 0 1))
+(standar-diet (kalori 1500) (pagi 1 1 0.5 0 0 0 1) (snack-pagi 0 0 0 0 1 0 0) (siang 2 1 1 1 1 0 2) (snack-sore 0 0 0 0 1 0 0) (malam 1 1 1 1 1 0 1))
+(standar-diet (kalori 1700) (pagi 1 1 0.5 0 0 0 1) (snack-pagi 0 0 0 0 1 0 0) (siang 2 1 1 1 1 0 2) (snack-sore 0 0 0 0 1 0 0) (malam 2 1 1 1 1 0 1))
+(standar-diet (kalori 1900) (pagi 1.5 1 0.5 0 0 0 2) (snack-pagi 0 0 0 0 1 0 0) (siang 2 1 1 1 1 0 2) (snack-sore 0 0 0 0 1 0 0) (malam 2 1 1 1 1 0 2))
+(standar-diet (kalori 2100) (pagi 1.5 1 1 0 0 0 2) (snack-pagi 0 0 0 0 1 0 0) (siang 2.5 1 1 1 1 0 3) (snack-sore 0 0 0 0 1 0 0) (malam 2.5 1 1 1 1 0 2))
+(standar-diet (kalori 2300) (pagi 1.5 1 1 0 0 0 2) (snack-pagi 0 0 0 0 1 1 0) (siang 3 1 1 1 1 0 3) (snack-sore 0 0 0 0 1 0 0) (malam 2.5 1 1 1 1 0 2))
+(standar-diet (kalori 2500) (pagi 2 1 1 0 0 0 2) (snack-pagi 0 0 0 0 1 1 0) (siang 3 1 2 1 1 0 3) (snack-sore 0 0 0 0 1 0 0) (malam 2.5 1 1 1 1 0 2))
