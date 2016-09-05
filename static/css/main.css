@@ -419,16 +419,29 @@ nav.sidebar-s li.active a:focus {
   margin-bottom: 12px; }
 
 .pa--heading2 {
-  color: #A52A2A;
-  font-family: 'Amaranth';
-  font-size: 20px;
-  margin-bottom: 12px; }
-
-.pa--heading3 {
   color: #1bbb8d;
   font-family: 'Amaranth';
   font-size: 33px;
   margin-bottom: 12px; }
+
+.pa--heading3 {
+  color: #006400;
+  font-family: 'Amaranth';
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 12px; }
+
+.pa--heading4 {
+  color: #1bbb8d;
+  font-family: 'Amaranth';
+  font-size: 33px;
+  text-align: center; }
+
+.pa--heading-star {
+  font-family: 'Amaranth';
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 20px; }
 
 @media (max-width: 565px) {
   .pa--heading {

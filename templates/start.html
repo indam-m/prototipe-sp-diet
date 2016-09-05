@@ -20,7 +20,7 @@
           <div class="pa--heading">
             Masukkan data pasien
           </div>
-          <form class="form-horizontal pa__form" action="result" method="post">
+          <form class="form-horizontal pa__form" name="inputform" action="result" onsubmit="return validateInput()" method="post">
             <div class="form-group">
               <label class="col-md-5 control-label">Jenis kelamin</label>
               <div class="col-md-7">
@@ -31,21 +31,21 @@
             <div class="form-group">
               <label class="col-md-5 control-label">Usia</label>
               <div class="col-xs-2">
-                <input class="form-control" type="number" min="15" max="60" id="usia" name="usia" required>
+                <input class="form-control" type="number" min="18" max="55" id="usia" name="usia" required>
               </div>
               <label class="control-label">tahun</label>
             </div>
             <div class="form-group">
               <label class="col-md-5 control-label">Tinggi badan</label>
               <div class="col-xs-2">
-                <input class="form-control" type="number" min="1" id="tb" name="tb" required>
+                <input class="form-control" type="number" min="40" id="tb" name="tb" required>
               </div>
               <label class="control-label">cm</label>
             </div>
             <div class="form-group">
               <label class="col-md-5 control-label">Berat badan</label>
               <div class="col-xs-2">
-                <input class="form-control" type="number" min="1" id="bb" name="bb" required>
+                <input class="form-control" type="number" min="3" id="bb" name="bb" required>
               </div>
               <label class="control-label">kg</label>
             </div>
@@ -53,10 +53,10 @@
               <label class="col-md-5 control-label">Aktivitas fisik</label>
               <div class="col-md-4">
                 <select class="form-control selcls" id="aktivitas" name="aktivitas">
-                  <option value="Sangat ringan"> Sangat ringan </option>
-                  <option value="Ringan"> Ringan </option>
-                  <option value="Sedang"> Sedang </option>
-                  <option value="Berat"> Berat </option>
+                  <option value="Sangat ringan"> Sangat ringan (duduk, diam di rumah, menggunakan komputer, sangat sedikit aktivitas fisik) </option>
+                  <option value="Ringan"> Ringan (kerja di kantor, sekolah, sedikit aktivitas lapangan) </option>
+                  <option value="Sedang"> Sedang (kerja lapang, olahraga ringan, aktivitas fisik cukup banyak)  </option>
+                  <option value="Berat"> Berat (olahraga berat, kerja kasar, aktivitas fisik berat) </option>
                 </select>
               </div>
             </div>

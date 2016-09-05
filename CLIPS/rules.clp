@@ -10,14 +10,23 @@
 
 ;; ?bb dalam kg, ?tb dalam cm, amb dalam kkal
 
-(defrule hitung-amb
+(defrule hitung-amb-laki-laki
 	(declare (salience 15))
 	?aksi <- (aksi HITUNG-AMB)
 	?data <- (pasien (berat-badan ?bb) (tinggi-badan ?tb) (jenis-kelamin ?jk) (usia ?u) (AMB ?amb))
+	(test (eq ?jk Laki-laki))
 	=>
 	(retract ?aksi)
-	(if (eq ?jk Laki-laki) then (modify ?data (AMB (hitung-amb-laki ?bb ?tb ?u)))
-		else (modify ?data (AMB (hitung-amb-perempuan ?bb ?tb ?u)))))
+	(modify ?data (AMB (round (+ 66 (* 13.7 ?bb) (* 5 ?tb) (- 0 (* 6.8 ?u)))))))
+
+(defrule hitung-amb-perempuan
+	(declare (salience 15))
+	?aksi <- (aksi HITUNG-AMB)
+	?data <- (pasien (berat-badan ?bb) (tinggi-badan ?tb) (jenis-kelamin ?jk) (usia ?u) (AMB ?amb))
+	(test (eq ?jk Perempuan))
+	=>
+	(retract ?aksi)
+	(modify ?data (AMB (round (+ 655 (* 9.6 ?bb) (* 1.8 ?tb) (- 0 (* 4.7 ?u)))))))
 
 (defrule hitung-imt
 	(declare (salience 11))
@@ -59,7 +68,7 @@
 (defrule hitung-kebutuhan-kalori-laki-laki
 	(declare (salience 10))
 	?aksi <- (aksi HITUNG-KEBUTUHAN-KALORI)
-	?data <- (pasien (AMB ?amb) (jenis-kelamin ?jk) (aktivitas ?aktivitas) (kategori-berat-badan ?kategori) (kebutuhan-kalori-total ?kal))
+	?data <- (pasien (AMB ?amb) (jenis-kelamin ?jk) (usia ?u) (aktivitas ?aktivitas) (kategori-berat-badan ?kategori) (kebutuhan-kalori ?kal))
 	(test (eq ?jk Laki-laki))
 	=>
 	(retract ?aksi)
@@ -67,11 +76,10 @@
 	(if (eq ?aktivitas "Ringan") then (bind ?kalori (* ?amb 1.65)))
 	(if (eq ?aktivitas "Sedang") then (bind ?kalori (* ?amb 1.76)))
 	(if (eq ?aktivitas "Berat") then (bind ?kalori (* ?amb 2.1)))
-	(if (< ?kategori 0) then 
-		(bind ?kalori (+ ?kalori 500)))
-	(if (> ?kategori 0) then
-		(bind ?kalori (- ?kalori 500)))
-	(modify ?data (kebutuhan-kalori-total (round ?kalori)))
+	(if (< ?kategori 0) then (bind ?kalori (+ ?kalori 500)))
+	(if (> ?kategori 0) then (bind ?kalori (- ?kalori 500)))
+	(if (> ?u 50) then (bind ?kalori (* ?kalori 0.95)))
+	(modify ?data (kebutuhan-kalori (round ?kalori)))
 
 	(if (<= ?kalori 1200) then (bind ?kelompok 1100))
 	(if (and (> ?kalori 1200) (<= ?kalori 1400)) then (bind ?kelompok 1300))
@@ -86,7 +94,7 @@
 (defrule hitung-kebutuhan-kalori-perempuan
 	(declare (salience 10))
 	?aksi <- (aksi HITUNG-KEBUTUHAN-KALORI)
-	?data <- (pasien (AMB ?amb) (jenis-kelamin ?jk) (aktivitas ?aktivitas) (kategori-berat-badan ?kategori) (kebutuhan-kalori-total ?kal))
+	?data <- (pasien (AMB ?amb) (jenis-kelamin ?jk) (usia ?u) (aktivitas ?aktivitas) (kategori-berat-badan ?kategori) (kebutuhan-kalori ?kal))
 	(test (eq ?jk Perempuan))
 	=>
 	(retract ?aksi)
@@ -94,11 +102,10 @@
 	(if (eq ?aktivitas "Ringan") then (bind ?kalori (* ?amb 1.55)))
 	(if (eq ?aktivitas "Sedang") then (bind ?kalori (* ?amb 1.7)))
 	(if (eq ?aktivitas "Berat") then (bind ?kalori (* ?amb 2.0)))
-	(if (< ?kategori 0) then 
-		(bind ?kalori (+ ?kalori 500)))
-	(if (> ?kategori 0) then
-		(bind ?kalori (- ?kalori 500)))
-	(modify ?data (kebutuhan-kalori-total (round ?kalori)))
+	(if (< ?kategori 0) then (bind ?kalori (+ ?kalori 500)))
+	(if (> ?kategori 0) then (bind ?kalori (- ?kalori 500)))
+	(if (> ?u 50) then (bind ?kalori (* ?kalori 0.95)))
+	(modify ?data (kebutuhan-kalori (round ?kalori)))
 
 	(if (<= ?kalori 1200) then (bind ?kelompok 1100))
 	(if (and (> ?kalori 1200) (<= ?kalori 1400)) then (bind ?kelompok 1300))
@@ -177,7 +184,7 @@
 (defrule tentukan-menu-pagi-dengan-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-PAGI)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl ya))
@@ -213,7 +220,7 @@
 (defrule tentukan-menu-pagi-tanpa-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-PAGI)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl tidak))
@@ -246,7 +253,7 @@
 (defrule tentukan-menu-siang-dengan-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-SIANG)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl ya))
@@ -278,7 +285,7 @@
 (defrule tentukan-menu-siang-tanpa-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-SIANG)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl tidak))
@@ -309,7 +316,7 @@
 (defrule tentukan-menu-malam-dengan-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-MALAM)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl ya))
@@ -341,7 +348,7 @@
 (defrule tentukan-menu-malam-tanpa-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-MALAM)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl tidak))
@@ -372,7 +379,7 @@
 (defrule tentukan-menu-snack-pagi-dengan-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-SNACK-PAGI)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl ya))
@@ -383,7 +390,7 @@
 	(bind ?s5 (nth$ 5 $?snack-pagi))
 	(bind ?s6 (nth$ 6 $?snack-pagi))
 	(do-for-all-facts ((?bahan bahan-makanan))
-		(and (= ?bahan:golongan 5) (not (member$ ?penyakit ?bahan:tidak-dianjurkan)) (not (member$ ?td ?bahan:tidak-dianjurkan)) (if (eq ?td rendah-purin) then (eq ?bahan:purin rendah) else true) (if (eq ?td tinggi-serat) then (or (eq ?bahan:serat tinggi) (eq ?bahan:serat nul)) else true))
+		(and (= ?bahan:golongan 5) (not (member$ ?penyakit ?bahan:tidak-dianjurkan)) (not (member$ ?td ?bahan:tidak-dianjurkan)) (if (eq ?td rendah-purin) then (eq ?bahan:purin rendah) else true) (neq ?bahan:lemak tinggi))
 		(assert (solusi-menu (nama ?bahan:nama) (golongan ?bahan:golongan) (waktu snack-pagi) (berat (round (* ?bahan:berat ?s5))) (URT (ubah-satu-desimal (* (nth$ 1 ?bahan:URT) ?s5)) (nth$ 2 ?bahan:URT))))
 	)
 	(if (> ?s6 0) then
@@ -396,7 +403,7 @@
 (defrule tentukan-menu-snack-pagi-tanpa-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-SNACK-PAGI)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	(test (eq ?rl tidak))
@@ -407,7 +414,7 @@
 	(bind ?s5 (nth$ 5 $?snack-pagi))
 	(bind ?s6 (nth$ 6 $?snack-pagi))
 	(do-for-all-facts ((?bahan bahan-makanan))
-		(and (= ?bahan:golongan 5) (not (member$ ?penyakit ?bahan:tidak-dianjurkan)) (not (member$ ?td ?bahan:tidak-dianjurkan)) (if (eq ?td rendah-purin) then (eq ?bahan:purin rendah) else true) (if (eq ?td tinggi-serat) then (or (eq ?bahan:serat tinggi) (eq ?bahan:serat nul)) else true))
+		(and (= ?bahan:golongan 5) (not (member$ ?penyakit ?bahan:tidak-dianjurkan)) (not (member$ ?td ?bahan:tidak-dianjurkan)) (if (eq ?td rendah-purin) then (eq ?bahan:purin rendah) else true))
 		(assert (solusi-menu (nama ?bahan:nama) (golongan ?bahan:golongan) (waktu snack-pagi) (berat (round (* ?bahan:berat ?s5))) (URT (ubah-satu-desimal (* (nth$ 1 ?bahan:URT) ?s5)) (nth$ 2 ?bahan:URT))))
 	)
 	(if (> ?s6 0) then
@@ -416,10 +423,26 @@
 			(assert (solusi-menu (nama ?bahan:nama) (golongan ?bahan:golongan) (waktu snack-pagi) (berat (round (* ?bahan:berat ?s6))) (URT (ubah-satu-desimal (* (nth$ 1 ?bahan:URT) ?s6)) (nth$ 2 ?bahan:URT)) (lemak ?bahan:lemak)))
 		)))
 
-(defrule tentukan-menu-snack-sore
+(defrule tentukan-menu-snack-sore-dengan-rendah-lemak
 	(declare (salience -5))
 	?aksi <- (aksi TENTUKAN-MENU-SNACK-SORE)
-	?pasien <- (pasien (kebutuhan-kalori-total ?kekal) (penyakit ?penyakit))
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
+	?kelompok-kalori <- (kelompok-kalori ?kelompok)
+	?rendah-lemak <- (rendah-lemak ?rl)
+	?kategori-diet <- (tipe-diet ?td)
+	?standar-diet <- (standar-diet (kalori ?kelompok) (snack-sore $?snack-sore))
+	=>
+	(retract ?aksi)
+	(bind ?s5 (nth$ 5 $?snack-sore))
+	(do-for-all-facts ((?bahan bahan-makanan))
+		(and (= ?bahan:golongan 5) (not (member$ ?penyakit ?bahan:tidak-dianjurkan)) (not (member$ ?td ?bahan:tidak-dianjurkan)) (if (eq ?td rendah-purin) then (eq ?bahan:purin rendah) else true) (neq ?bahan:lemak tinggi))
+		(assert (solusi-menu (nama ?bahan:nama) (golongan ?bahan:golongan) (waktu snack-sore) (berat (round (* ?bahan:berat ?s5))) (URT (ubah-satu-desimal (* (nth$ 1 ?bahan:URT) ?s5)) (nth$ 2 ?bahan:URT)) (lemak ?bahan:lemak)))
+	))
+
+(defrule tentukan-menu-snack-sore-tanpa-rendah-lemak
+	(declare (salience -5))
+	?aksi <- (aksi TENTUKAN-MENU-SNACK-SORE)
+	?pasien <- (pasien (kebutuhan-kalori ?kekal) (penyakit ?penyakit))
 	?kelompok-kalori <- (kelompok-kalori ?kelompok)
 	?rendah-lemak <- (rendah-lemak ?rl)
 	?kategori-diet <- (tipe-diet ?td)
@@ -432,7 +455,7 @@
 		(assert (solusi-menu (nama ?bahan:nama) (golongan ?bahan:golongan) (waktu snack-sore) (berat (round (* ?bahan:berat ?s5))) (URT (ubah-satu-desimal (* (nth$ 1 ?bahan:URT) ?s5)) (nth$ 2 ?bahan:URT)) (lemak ?bahan:lemak)))
 	))
 
-(defrule tentukan-tips-diet-biasa
+(defrule keluarkan-tips-diet-biasa
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit "-") (kategori-berat-badan ?kategori))
@@ -440,7 +463,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>
 	")
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
@@ -453,7 +476,7 @@
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-asam-urat
+(defrule keluarkan-tips-diet-asam-urat
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -467,11 +490,12 @@
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Hindari makanan yang mengandung purin tinggi, seperti : otak, hati, jantung, ginjal, jeroan, ekstrak daging/kaldu, boillon, bebek, ikan sardin, makarel, remis, kerang.</li>")
 	(printout t "<li>Batasi makanan yang mengandung purin sedang, seperti : daging sapi dan ikan (selain ikan dengan purin tinggi), ayam, udang; kacang kering dan hasil olah, seperti tahu dan tempe; asparagus, bayam, daun singkong, kangkung, daun dan biji melinjo, buncis.</li>")
+	(printout t "<li>Jika mengonsumsi makanan yang mengandung ragi seperti roti, panaskan terlebih dahulu untuk mematikan peragian.</li>")
 	(printout t "<li>Hindari konsumsi makanan yang mengandung natrium tinggi dan mengandung pengawet.</li>")
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-diabetes-melitus
+(defrule keluarkan-tips-diet-diabetes-melitus
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -488,7 +512,7 @@
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-konstipasi-kronis
+(defrule keluarkan-tips-diet-konstipasi-kronis
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -501,11 +525,11 @@
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Perbanyak konsumsi cairan, yaitu 8 - 10 gelas sehari.</li>")
 	(printout t "<li>Dianjurkan untuk mengonsumsi vitamin dan mineral yang tinggi, terutama vitamin B untuk memelihara kekuatan otot saluran cerna.</li>")
-	(printout t "<li>Perbanyak konsumsi makanan berserat tinggi.</li>")
+	(printout t "<li>Perbanyak konsumsi makanan berserat tinggi dari buah dan sayuran.</li>")
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-hiperkolesterol
+(defrule keluarkan-tips-diet-hiperkolesterol
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -520,11 +544,11 @@
 	(printout t "<li>Batasi penggunaan minyak dengan lemak jenuh.</li>")
 	(printout t "<li>Hindari makanan yang digoreng. Cara memasak makanan yang dianjurkan adalah merebus, mengetim, memepes, memanggang, membakar, atau menumis.</li>")
 	(printout t "<li>Batasi konsumsi makanan yang mengandung natrium tinggi dan mengandung pengawet.</li>")
-	(printout t "<li>Batasi penggunaan garam pada makanan, yaitu tidak lebih dari 1 sdt (3 g) garam dapur. Dianjurkan tidak menambahkan garam lagi pada makanan karena kebanyakan bahan makanan sudah mengandung garam.</li>")
+	(printout t "<li>Perbanyak konsumsi makanan berserat tinggi dari buah dan sayuran.</li>")
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-hipertensi
+(defrule keluarkan-tips-diet-hipertensi
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -538,9 +562,12 @@
 	(printout t "<li>Perbanyak konsumsi cairan sekitar 10 gelas / hari.</li>")
 	(printout t "<li>Batasi penggunaan garam pada makanan, yaitu tidak lebih dari 1 sdt (3 g) garam dapur. Dianjurkan tidak menambahkan garam lagi pada makanan karena kebanyakan bahan makanan sudah mengandung garam.</li>")
 	(printout t "<li>Hindari bahan makanan dengan kadar natrium tinggi, seperti biskuit, snack ringan, dan makanan berpengawet seperti manisan.</li>")
+	(printout t "<li>Perbanyak konsumsi makanan berserat tinggi dari buah dan sayuran.</li>")
+	(printout t "<li>Tidak dianjurkan untuk mengonsumsi kopi dan alkohol.</li>")
+	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-hipertrigliserida
+(defrule keluarkan-tips-diet-hipertrigliserida
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -554,13 +581,11 @@
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Batasi konsumsi makanan yang digoreng. Cara memasak makanan yang dianjurkan adalah merebus, mengetim, memepes, memanggang, membakar, atau menumis.</li>")
 	(printout t "<li>Batasi konsumsi makanan yang mengandung natrium tinggi dan mengandung pengawet.</li>")
-	(printout t "<li>Jika mengonsumsi makanan yang mengandung ragi seperti roti, panaskan terlebih dahulu untuk mematikan peragian.</li>")
-	(printout t "<li>Kurangi konsumsi makanan yang mengandung gula tinggi</li>")
-	(printout t "<li>Hindari konsumsi kopi dan alkohol secara berlebihan.</li>")
+	(printout t "<li>Batasi konsumsi makanan yang mengandung gula tinggi dan karbohidrat terlalu banyak.</li>")
 	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-jantung
+(defrule keluarkan-tips-diet-jantung
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -576,12 +601,12 @@
 	(printout t "<li>Cara memasak makanan yang dianjurkan adalah merebus, mengetim, memepes, memanggang, membakar, atau menumis.</li>")
 	(printout t "<li>Hindari bahan makanan dengan kadar natrium tinggi, seperti biskuit, snack ringan, dan makanan berpengawet seperti manisan.</li>")
 	(printout t "<li>Hindari makanan yang mengandung gas tinggi seperti ubi dan singkong.</li>")
-	(printout t "<li>Perbanyak konsumsi makanan dengan kalsium tinggi, seperti susu, yoghurt; sayuran seperti bayam, lobak, dan kangkung; kacang-kacangan; buah seperti jeruk, pisang, dan alpukat.</li>")
+	(printout t "<li>Perbanyak konsumsi makanan dengan kalsium tinggi, seperti susu, yoghurt; kacang-kacangan; buah seperti jeruk, pisang, dan alpukat.</li>")
 	(printout t "<li>Tidak dianjurkan untuk mengonsumsi kopi dan alkohol.</li>")
 	(printout t "<li>Bumbu masak yang diperbolehkan adalah semua macam bumbu tetapi tidak yang merangsang dan tidak pedas.</li>")
 	(printout t "</ul></div>"))
 
-(defrule tentukan-tips-diet-penyakit-lambung
+(defrule keluarkan-tips-diet-penyakit-lambung
 	(declare (salience -60))
 	?aksi <- (aksi TENTUKAN-TIPS-DIET)
 	?pasien <- (pasien (penyakit ?penyakit) (kategori-berat-badan ?kategori))
@@ -593,16 +618,15 @@
 	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Perbanyak konsumsi cairan, yaitu 8 - 10 gelas liter sehari.</li>")
-	(printout t "<li>Dianjurkan untuk mengonsumsi vitamin dan mineral yang tinggi, terutama vitamin B untuk memelihara kekuatan otot.</li>")
 	(printout t "<li>Hindari makanan bernatrium tinggi dan berpengawet seperti makanan kaleng.</li>")
-	(printout t "<li>Hindari makanan yang mengandung gas tinggi seperti ubi dan singkong.</li>")
-	(printout t "<li>Lakukan aktivitas seperti jalan kaki 2 km per hari.</li>")
+	(printout t "<li>Hindari makanan yang mengandung gas tinggi seperti ubi, singkong, dan sayuran putih.</li>")
+	(printout t "<li>Dianjurkan untuk makan dengan porsi kecil tetapi lebih sering.</li>")
 	(printout t "</ul></div>"))
 
 (defrule print-solusi
 	(declare (salience -50))
 	(queue)
-	?pasien <- (pasien (usia ?u) (jenis-kelamin ?jk) (tinggi-badan ?tb) (berat-badan ?bb) (penyakit ?penyakit) (AMB ?amb) (IMT ?imt) (kategori-berat-badan ?kategori) (kebutuhan-kalori-total ?kalori) (aktivitas ?aktivitas))
+	?pasien <- (pasien (usia ?u) (jenis-kelamin ?jk) (tinggi-badan ?tb) (berat-badan ?bb) (penyakit ?penyakit) (AMB ?amb) (IMT ?imt) (kategori-berat-badan ?kategori) (kebutuhan-kalori ?kalori) (aktivitas ?aktivitas))
 	?kategori-diet <- (tipe-diet ?td)
 	=>
 	(printout t "
@@ -656,36 +680,46 @@
       </div>
       <div class=\"result\"></div><br>")
 
+	(printout t "<form id=\"menu\">
+		<div class=\"pa--heading4\">Pilihan Menu Makanan</div>
+		<div class=\"pa--heading-star\">(Pilih salah satu untuk masing-masing bahan makanan)</div>")
 	(printout t "
-		<div class=\"row\">
+	<div class=\"row\">
         <div class=\"col-md-4 result2\">
-          <div class=\"pa--heading\">Menu Pagi</div>")
+          <div class=\"pa--heading3\">Menu Pagi</div>")
 	(printout t (output-list-bahan-makanan-utama pagi ?penyakit ?td))
 	
 	(printout t "
 		</div>
 		<div class=\"col-md-4 result2\">
-          <div class=\"pa--heading\">Menu Siang</div>")
+          <div class=\"pa--heading3\">Menu Siang</div>")
 	(printout t (output-list-bahan-makanan-utama siang ?penyakit ?td))
 	
 	(printout t "
 		</div>
 		<div class=\"col-md-4\">
-          <div class=\"pa--heading\">Menu Malam</div>")
+          <div class=\"pa--heading3\">Menu Malam</div>")
 	(printout t (output-list-bahan-makanan-utama malam ?penyakit ?td))
 
 	(printout t "
 		</div>
       </div>
-      <br>
+      <br><br>
       <div class=\"row\">
         <div class=\"col-md-4 result2\">
-          <div class=\"pa--heading\">Snack Pagi (10.00)</div>")
+          <div class=\"pa--heading3\">Snack Pagi (10.00)</div>")
 	(printout t (output-list-bahan-makanan-snack snack-pagi))
 
 	(printout t "
 		</div>
         <div class=\"col-md-4\">
-          <div class=\"pa--heading\">Snack Sore (16.00)</div>")
+          <div class=\"pa--heading3\">Snack Sore (16.00)</div>")
 	(printout t (output-list-bahan-makanan-snack snack-sore))
-	(printout t "</div></div>"))
+	(printout t "</div></div>")
+	(printout t "
+		<div class="form-group">
+          <div class=\"col-md-7 pa__btn-container-form\">
+            <input type=\"submit\" class=\"btn btn-tosca btn-margin-bottom\" value=\"Lanjut\"></input>
+          </div>
+        </div><br><br>
+	</form>"))

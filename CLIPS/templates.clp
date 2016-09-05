@@ -8,7 +8,7 @@
 	(slot AMB (default 0))
 	(slot IMT (default 0))
 	(slot kategori-berat-badan (default 0))
-	(slot kebutuhan-kalori-total (default 0)))
+	(slot kebutuhan-kalori (default 0)))
 
 (deftemplate bahan-makanan
 	(slot nama (type STRING))

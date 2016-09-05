@@ -18,57 +18,57 @@
 
 (deffunction output-golongan-makanan (?gol)
 	(switch ?gol
-		(case 1 then "<option>------ Sumber Hidrat Arang ------</option>")
-        (case 2 then "<option>---- Sumber Protein Hewani -----</option>")
-        (case 3 then "<option>----- Sumber Protein Nabati -----</option>")
-        (case 4 then "<option>------------ Sayuran ------------</option>")
-        (case 5 then "<option>--------- Buah atau Gula --------</option>")
-        (case 6 then "<option>------------- Susu --------------</option>")
-        (case 7 then "<option>------------ Minyak -------------</option>")
+		(case 1 then "<option value=\"\">------ Sumber Hidrat Arang ------</option>")
+        (case 2 then "<option value=\"\">---- Sumber Protein Hewani -----</option>")
+        (case 3 then "<option value=\"\">----- Sumber Protein Nabati -----</option>")
+        (case 4 then "<option value=\"\">------------ Sayuran ------------</option>")
+        (case 5 then "<option value=\"\">--------- Buah atau Gula --------</option>")
+        (case 6 then "<option value=\"\">------------- Susu --------------</option>")
+        (case 7 then "<option value=\"\">------------ Minyak -------------</option>")
         (default " ")))
 
 (deffunction output-list-bahan-makanan-utama (?waktu ?penyakit ?td)
 	(bind ?out "")
 	(loop-for-count (?i 1 7) do
 		(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i))) then
-			(if (> ?i 1) then (bind ?out (str-cat ?out "<div align=\"center\"><span class=\"glyphicon glyphicon-plus\"></span></div>")))
-			(bind ?out (str-cat ?out "<select class=\"form-control selcls\" id=\"a\">"))
+			(if (> ?i 1) then (bind ?out (str-cat ?out "<br>")))
+			(bind ?out (str-cat ?out "<select id=\"" ?waktu "-" ?i "\" class=\"form-control selcls\" id=\"a\">"))
 			(bind ?out (str-cat ?out (output-golongan-makanan ?i)))
 			(if (= ?i 2) then
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak sedang))) then 
-					(bind ?out (str-cat ?out "<option>-- rendah lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- rendah lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak rendah))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak sedang))) then 
-					(bind ?out (str-cat ?out "<option>-- lemak sedang --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- lemak sedang --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak sedang))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak tinggi))) then
-					(bind ?out (str-cat ?out "<option>-- tinggi lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- tinggi lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tinggi))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 			)
 			(if (= ?i 6) then
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak sedang))) then 
-					(bind ?out (str-cat ?out "<option>-- tanpa lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- tanpa lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tanpa))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak rendah))) then 
-					(bind ?out (str-cat ?out "<option>-- rendah lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- rendah lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak rendah))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak rendah))) then
-					(bind ?out (str-cat ?out "<option>-- tinggi lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- tinggi lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tinggi))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 			)
 			(if (= ?i 7) then
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak jenuh))) then 
-					(bind ?out (str-cat ?out "<option>-- lemak tidak jenuh --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- lemak tidak jenuh --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tak-jenuh))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak jenuh))) then 
-					(bind ?out (str-cat ?out "<option>-- lemak jenuh --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- lemak jenuh --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak jenuh))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 			)
@@ -79,12 +79,12 @@
 			(bind ?out (str-cat ?out "</select>"))
 		)
 		(if (= ?i 3) then 
-			(bind ?out (str-cat ?out "<div align=\"center\"><span class=\"glyphicon glyphicon-plus\"></span></div>"))
-			(bind ?out (str-cat ?out "<select class=\"form-control selcls\" id=\"a\">"))
-			(bind ?out (str-cat ?out "<option>-- Sayuran A (sekehendaknya) ---</option>"))
+			(bind ?out (str-cat ?out "<br>"))
+			(bind ?out (str-cat ?out "<select id=\"" ?waktu "-A" "\" class=\"form-control selcls\" id=\"a\">"))
+			(bind ?out (str-cat ?out "<option value=\"\">-- Sayuran A (sekehendaknya) ---</option>"))
 			(do-for-all-facts ((?SA sayuran-A))
 				(and (if (eq ?penyakit "Jantung") then (neq ?SA:serat tinggi) else true) (if (eq ?td tinggi-serat) then (or (eq ?SA:serat tinggi) (eq ?SA:serat nul)) else true))
-				(bind ?out (str-cat ?out "<option>" ?SA:nama "</option>")))
+				(bind ?out (str-cat ?out "<option value=\"" ?SA:nama " (sekehendaknya)\">" ?SA:nama "</option>")))
 			(bind ?out (str-cat ?out "</select>")))
 
 		(if (= ?i 7) then (break))
@@ -95,20 +95,20 @@
 	(bind ?out "")
 	(loop-for-count (?i 5 6) do
 		(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i))) then
-			(if (> ?i 5) then (bind ?out (str-cat ?out "<div align=\"center\"><span class=\"glyphicon glyphicon-plus\"></span></div>")))
-			(bind ?out (str-cat ?out "<select class=\"form-control selcls\" id=\"a\">"))
+			(if (> ?i 5) then (bind ?out (str-cat ?out "<br>")))
+			(bind ?out (str-cat ?out "<select id=\"" ?waktu "-" ?i "\" class=\"form-control selcls\" id=\"a\">"))
 			(bind ?out (str-cat ?out (output-golongan-makanan ?i)))
 			(if (= ?i 6) then
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak rendah))) then 
-					(bind ?out (str-cat ?out "<option>-- tanpa lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- tanpa lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tanpa))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak rendah))) then 
-					(bind ?out (str-cat ?out "<option>-- rendah lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- rendah lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak rendah))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 				(if (any-factp ((?f solusi-menu)) (and (eq ?f:waktu ?waktu) (= ?f:golongan ?i) (eq ?f:lemak tinggi))) then
-					(bind ?out (str-cat ?out "<option>-- tinggi lemak --</option>")))
+					(bind ?out (str-cat ?out "<option value=\"\">-- tinggi lemak --</option>")))
 				(do-for-all-facts ((?bahan solusi-menu)) (and (eq ?bahan:waktu ?waktu) (= ?bahan:golongan ?i) (eq ?bahan:lemak tinggi))
 					(bind ?out (str-cat ?out "<option>" ?bahan:nama "  " ?bahan:berat " gr / " (nth$ 1 ?bahan:URT) " " (nth$ 2 ?bahan:URT) "</option>")))
 			)

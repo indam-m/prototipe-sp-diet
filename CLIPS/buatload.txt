@@ -19,3 +19,16 @@ x = 13.5
 (bahan-makanan (nama "") (golongan 1) (berat ) (satuan ))
 
 cd /Users/indammuhammad/Documents/perkuliahan/Tugas\ Akhir/Program/Web/Web2
+
+LAPORAN JANGAN LUPA:
+- faktor umur buat diatas 50 taun
+- ttg aktivitas pd pasien (baik di bab 2 dan bab 3)
+- nama "kebutuhan-kalori-total" jadi "kebutuhan-kalori"
+- cek lagi akuisisi pengetahuan
+- tentang "tipe badan" jadi "kategori berat badan"
+- tentang "mesin inferensi" Sukmanegara istilahnya apa, tanyain
+- hal lain yang mungkin luput
+
+;; Buat + 
+<div align=\"center\"><span class=\"glyphicon glyphicon-plus\"></span></div>
+<div align=\"center\">+</div>
