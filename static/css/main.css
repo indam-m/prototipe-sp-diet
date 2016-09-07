@@ -242,6 +242,35 @@ nav.sidebar-s li.active a:focus {
   border-bottom: 5px solid #e46e4d;
   text-decoration: none; }
 
+.btn-circle {
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  padding: 25px 0;
+  font-size: 20px;
+  line-height: 1.42;
+  border-radius: 60px;
+  font-family: 'Amaranth';
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #1bbb8d;
+  color: #fff;
+  border-bottom: 7px solid #17a17a;
+  border-right: 7px solid #17a17a;
+}
+
+.btn-circle:hover {
+  color: #fff;
+  background: #17a17a;
+  border-bottom: 7px solid #117357;
+  border-right: 7px solid #117357;
+  text-decoration: none; }
+
+.btn-red:focus,
+.btn-red:active {
+  background: #18a079;
+  text-decoration: none; }
+
 .btn-tosca {
   color: #fff;
   letter-spacing: 1.3px;
@@ -255,7 +284,8 @@ nav.sidebar-s li.active a:focus {
 
 .btn-tosca:hover {
   color: #fff;
-  background: #1bb68a;
+  background: #17a17a;
+  border-bottom: 5px solid #117357;
   text-decoration: none; }
 
 .btn-tosca:focus,
@@ -394,8 +424,8 @@ nav.sidebar-s li.active a:focus {
     margin-top: 34px; } }
 
 .pa__box {
-  border-top: 8px solid #00B2EE;
-  border-bottom: 8px solid #00B2EE;
+  border-top: 10px solid #00B2EE;
+  border-bottom: 10px solid #00B2EE;
   background: #fff;
   -webkit-box-shadow: -2px 1px 14px 0px rgba(123, 123, 123, 0.39);
   -moz-box-shadow: -2px 1px 14px 0px rgba(123, 123, 123, 0.39);
@@ -411,10 +441,21 @@ nav.sidebar-s li.active a:focus {
   border-right: 2px dotted #8B4513;
   background: #fff; }
 
+.capz {
+    text-transform: capitalize;
+}
+
 .pa--heading {
   color: #1bbb8d;
   font-family: 'Amaranth';
   font-size: 33px;
+  text-align: center;
+  margin-bottom: 12px; }
+
+.pa--heading0 {
+  color: #1bbb8d;
+  font-family: 'Amaranth';
+  font-size: 40px;
   text-align: center;
   margin-bottom: 12px; }
 

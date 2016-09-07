@@ -17,7 +17,9 @@
 	(test (eq ?jk Laki-laki))
 	=>
 	(retract ?aksi)
-	(modify ?data (AMB (round (+ 66 (* 13.7 ?bb) (* 5 ?tb) (- 0 (* 6.8 ?u)))))))
+	(bind ?amb (round (+ 66 (* 13.7 ?bb) (* 5 ?tb) (- 0 (* 6.8 ?u)))))
+	(if (>= ?u 50) then (bind ?amb (round (* ?amb 0.95))))
+	(modify ?data (AMB ?amb)))
 
 (defrule hitung-amb-perempuan
 	(declare (salience 15))
@@ -26,7 +28,9 @@
 	(test (eq ?jk Perempuan))
 	=>
 	(retract ?aksi)
-	(modify ?data (AMB (round (+ 655 (* 9.6 ?bb) (* 1.8 ?tb) (- 0 (* 4.7 ?u)))))))
+	(bind ?amb (round (+ 655 (* 9.6 ?bb) (* 1.8 ?tb) (- 0 (* 4.7 ?u)))))
+	(if (>= ?u 50) then (bind ?amb (round (* ?amb 0.95))))
+	(modify ?data (AMB ?amb)))
 
 (defrule hitung-imt
 	(declare (salience 11))
@@ -78,7 +82,7 @@
 	(if (eq ?aktivitas "Berat") then (bind ?kalori (* ?amb 2.1)))
 	(if (< ?kategori 0) then (bind ?kalori (+ ?kalori 500)))
 	(if (> ?kategori 0) then (bind ?kalori (- ?kalori 500)))
-	(if (> ?u 50) then (bind ?kalori (* ?kalori 0.95)))
+	(if (>= ?u 50) then (bind ?kalori (* ?kalori 0.95)))
 	(modify ?data (kebutuhan-kalori (round ?kalori)))
 
 	(if (<= ?kalori 1200) then (bind ?kelompok 1100))
@@ -123,9 +127,9 @@
 	?pasien <- (pasien (penyakit ?penyakit))
 	=>
 	(retract ?aksi)
-	(if (or (eq ?penyakit "-") (eq ?penyakit "Jantung") (eq ?penyakit "Hipertrigliserida")) then 
+	(if (or (eq ?penyakit "-") (eq ?penyakit "Jantung") (eq ?penyakit "Hipertrigliserida") (eq ?penyakit "Penyakit lambung")) then 
 		(assert (goal PENETAPAN-DIET-BIASA)))
-	(if (or (eq ?penyakit "Hiperkolesterol") (eq ?penyakit "Hipertensi") (eq ?penyakit "Konstipasi kronis") (eq ?penyakit "Penyakit lambung")) then 
+	(if (or (eq ?penyakit "Hiperkolesterol") (eq ?penyakit "Hipertensi") (eq ?penyakit "Konstipasi kronis")) then 
 		(assert (goal PENETAPAN-DIET-TINGGI-SERAT)))
 	(if (eq ?penyakit "Diabetes melitus") then (assert (goal PENETAPAN-DIET-DIABETES)))
 	(if (eq ?penyakit "Asam urat") then (assert (goal PENETAPAN-DIET-RENDAH-PURIN))))
@@ -164,7 +168,7 @@
 	?pasien <- (pasien (kategori-berat-badan ?kategori-berat-badan) (penyakit ?penyakit))
 	=>
 	(retract ?aksi)
-	(if (or (> ?kategori-berat-badan 0) (eq ?penyakit "Asam urat") (eq ?penyakit "Hipertensi") (eq ?penyakit "Hiperkolesterol") (eq ?penyakit "Hipertrigliserida") (eq ?penyakit "Jantung")) then (assert (goal DENGAN-DIET-RENDAH-LEMAK))
+	(if (or (> ?kategori-berat-badan 0) (eq ?penyakit "Asam urat") (eq ?penyakit "Diabetes melitus") (eq ?penyakit "Hipertensi") (eq ?penyakit "Hiperkolesterol") (eq ?penyakit "Hipertrigliserida") (eq ?penyakit "Jantung")) then (assert (goal DENGAN-DIET-RENDAH-LEMAK))
 		else (assert (goal TANPA-DIET-RENDAH-LEMAK))))
 
 (defrule tetapkan-diet-dengan-rendah-lemak
@@ -485,7 +489,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Hindari makanan yang mengandung purin tinggi, seperti : otak, hati, jantung, ginjal, jeroan, ekstrak daging/kaldu, boillon, bebek, ikan sardin, makarel, remis, kerang.</li>")
@@ -504,7 +508,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Tidak diperbolehkan menggunakan gula murni dalam makanan dan minuman, kecuali jumlahnya sedikit sebagai bumbu.</li>")
@@ -521,7 +525,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Perbanyak konsumsi cairan, yaitu 8 - 10 gelas sehari.</li>")
 	(printout t "<li>Dianjurkan untuk mengonsumsi vitamin dan mineral yang tinggi, terutama vitamin B untuk memelihara kekuatan otot saluran cerna.</li>")
@@ -538,7 +542,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Batasi penggunaan minyak dengan lemak jenuh.</li>")
@@ -557,7 +561,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Perbanyak konsumsi cairan sekitar 10 gelas / hari.</li>")
 	(printout t "<li>Batasi penggunaan garam pada makanan, yaitu tidak lebih dari 1 sdt (3 g) garam dapur. Dianjurkan tidak menambahkan garam lagi pada makanan karena kebanyakan bahan makanan sudah mengandung garam.</li>")
@@ -576,7 +580,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Konsumsi cairan yang dianjurkan adalah 2 liter (8 gelas) sehari.</li>")
 	(printout t "<li>Batasi konsumsi makanan yang digoreng. Cara memasak makanan yang dianjurkan adalah merebus, mengetim, memepes, memanggang, membakar, atau menumis.</li>")
@@ -594,7 +598,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Konsumsi cairan dibatasi agar tidak memperberat kerja jantung.</li>")
 	(printout t "<li>Perbanyak konsumsi ikan yang mengandung omega 3, 6, dan 9.</li>")
@@ -615,7 +619,7 @@
 	(retract ?aksi)
 	(printout t "
 		<div class="result"></div><br>
-	    <div class="pa--heading3">&nbsp;&nbsp; Tips </div>
+	    <div class="pa--heading2">&nbsp;&nbsp; Tips </div>
 	    <div class="tips-text"><ul>")
 	(printout t "<li>Perbanyak konsumsi cairan, yaitu 8 - 10 gelas liter sehari.</li>")
 	(printout t "<li>Hindari makanan bernatrium tinggi dan berpengawet seperti makanan kaleng.</li>")
@@ -628,44 +632,46 @@
 	(queue)
 	?pasien <- (pasien (usia ?u) (jenis-kelamin ?jk) (tinggi-badan ?tb) (berat-badan ?bb) (penyakit ?penyakit) (AMB ?amb) (IMT ?imt) (kategori-berat-badan ?kategori) (kebutuhan-kalori ?kalori) (aktivitas ?aktivitas))
 	?kategori-diet <- (tipe-diet ?td)
+	?rendah-lemak <- (rendah-lemak ?rl)
+	?kelompok-kalori <- (kelompok-kalori ?kk)
 	=>
 	(printout t "
       <div class=\"row\">
         <div class=\"col-sm-1\"></div>
         <div class=\"col-sm-5\">
           <div class=\"row\">
-            <div class=\"col-sm-5\"><b>Jenis kelamin</b></div>
+            <div class=\"col-sm-6\"><b>Jenis kelamin</b></div>
             <div class=\"col-sm-5\">" ?jk "</div>
           </div>
           <div class=\"row\">
-            <div class=\"col-sm-5\"><b>Usia</b></div>
+            <div class=\"col-sm-6\"><b>Usia</b></div>
             <div class=\"col-sm-5\">" ?u " tahun</div>
           </div>
           <div class=\"row\">
-            <div class=\"col-sm-5\"><b>Tinggi badan</b></div>
+            <div class=\"col-sm-6\"><b>Tinggi badan</b></div>
             <div class=\"col-sm-5\">" ?tb " cm</div>
           </div>
           <div class=\"row\">
-            <div class=\"col-sm-5\"><b>Berat badan</b></div>
+            <div class=\"col-sm-6\"><b>Berat badan</b></div>
             <div class=\"col-sm-5\">" ?bb " kg</div>
           </div>
           <div class=\"row\">
-            <div class=\"col-sm-5\"><b>Penyakit</b></div>
+            <div class=\"col-sm-6\"><b>Penyakit</b></div>
             <div class=\"col-sm-6\">" ?penyakit "</div>
           </div>
-        </div>
-        <div class=\"col-sm-5\">
           <div class=\"row\">
             <div class=\"col-sm-6\"><b>Aktivitas fisik</b></div>
             <div class=\"col-sm-5\">" ?aktivitas "</div>
           </div>
           <div class=\"row\">
-            <div class=\"col-sm-6\"><b>IMT</b></div>
-            <div class=\"col-sm-4\">" ?imt "</div>
-          </div>
-          <div class=\"row\">
             <div class=\"col-sm-6\"><b>Kategori berat badan</b></div>
             <div class=\"col-sm-5\">" (output-kategori-berat-badan ?kategori) "</div>
+          </div>
+        </div>
+        <div class=\"col-sm-5\">
+          <div class=\"row\">
+            <div class=\"col-sm-6\"><b>IMT</b></div>
+            <div class=\"col-sm-4\">" ?imt "</div>
           </div>
           <div class=\"row\">
             <div class=\"col-sm-6\"><b>AMB</b></div>
@@ -674,6 +680,18 @@
           <div class=\"row\">
             <div class=\"col-sm-6\"><b>Kebutuhan kalori</b></div>
             <div class=\"col-sm-4\">" ?kalori " kkal</div>
+          </div>
+          <div class=\"row\">
+            <div class=\"col-sm-6\"><b>Kelompok kalori yang dipilih</b></div>
+            <div class=\"col-sm-4\">" ?kk " kkal</div>
+          </div>
+          <div class=\"row\">
+            <div class=\"col-sm-6\"><b>Diet rendah lemak</b></div>
+            <div class=\"col-sm-4 capz\">" ?rl " </div>
+          </div>
+          <div class=\"row\">
+            <div class=\"col-sm-6\"><b>Tipe diet</b></div>
+            <div class=\"col-sm-5\">Diet " (print-tipe-diet ?td) " </div>
           </div>
         </div>
         <div class=\"col-sm-1\"></div>

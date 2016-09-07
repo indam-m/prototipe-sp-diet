@@ -1,9 +1,3 @@
-(deffunction hitung-amb-laki (?bb ?tb ?u)
-	(round (+ 66 (* 13.7 ?bb) (* 5 ?tb) (- 0 (* 6.8 ?u)))))
-
-(deffunction hitung-amb-perempuan (?bb ?tb ?u)
-	(round (+ 655 (* 9.6 ?bb) (* 1.8 ?tb) (- 0 (* 4.7 ?u)))))
-
 (deffunction output-kategori-berat-badan (?kat)
 	(switch ?kat
 		(case -2 then "Kurus berat")
@@ -121,3 +115,11 @@
 		(if (= ?i 6) then (break))
 	)
 	?out)
+
+(deffunction print-tipe-diet (?td)
+	(switch ?td
+		(case rendah-purin then "rendah purin")
+		(case tinggi-serat then "tinggi serat")
+		(default ?td)
+	)
+)	

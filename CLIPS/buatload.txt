@@ -29,6 +29,9 @@ LAPORAN JANGAN LUPA:
 - tentang "mesin inferensi" Sukmanegara istilahnya apa, tanyain
 - hal lain yang mungkin luput
 
+7 SEPT 2016
+- Di gambar arsitektur SP, "aplikasi" jadi "prototipe"
+
 ;; Buat + 
 <div align=\"center\"><span class=\"glyphicon glyphicon-plus\"></span></div>
 <div align=\"center\">+</div>
